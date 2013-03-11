@@ -159,6 +159,12 @@ if (grep -Fiq "hg+" requirements.txt) then
   /app/.heroku/python/bin/pip install --use-mirrors mercurial | cleanup | indent
 fi
 
+# copy supplied .ssh configuration before installing requirements
+if [ ! -d .ssh ]; then
+  puts-step "Copying .ssh directory to $APP_DIR..."
+  cp -R .ssh $APP_DIR/.ssh
+fi
+
 # Install dependencies with Pip.
 puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 /app/.heroku/python/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
